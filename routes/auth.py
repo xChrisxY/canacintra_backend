@@ -25,7 +25,7 @@ def register():
     db.session.add(new_user)
     db.session.commit()
 
-    access_token = create_access_token(identity=new_user.id)
+    access_token = create_access_token(identity=str(new_user.id))
 
     return jsonify({"message": "User registered succesfully", "access_token":access_token}), 201
 
@@ -48,7 +48,9 @@ def login():
 
     access_token = create_access_token(identity=str(user.id))
 
-    return jsonify({"access_token": access_token}), 200
+    username = User.query.filter_by(id=str(user.id)).first()
+
+    return jsonify({"name": str(username),"access_token": access_token}), 200
 
 @auth_bp.route('/protected', methods=['GET'])
 @jwt_required()

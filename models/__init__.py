@@ -1,4 +1,4 @@
-from .component import Component
+from .components import Components
 from .hydroponic_systems import HydroponicSystem
 from .optimal import Optimal
 from .plant_category import PlantCategory
@@ -7,4 +7,3 @@ from .plant import Plant
 from .read import Read
 from .sensor_reading import SensorReading
 from .sensor import Sensor
-from .user_hydroponic_systems import UserHydroponicSystem
