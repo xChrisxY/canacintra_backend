@@ -32,25 +32,30 @@ def register():
     
 @auth_bp.route('/login', methods=['POST'])
 def login():
+
+    try:
     
-    data = request.get_json()
+        data = request.get_json()
 
-    if not data.get('email') or not data.get('password'):
-        return jsonify({'message': 'Missing required fields'}), 400
+        if not data.get('email') or not data.get('password'):
+            return jsonify({'message': 'Missing required fields'}), 400
 
-    user = User.query.filter_by(email=data['email']).first()
+        user = User.query.filter_by(email=data['email']).first()
 
-    if not user:
-        return jsonify({"message": "Invalid email or password"}), 401
+        if not user:
+            return jsonify({"message": "Invalid email or password"}), 401
 
-    if not check_password_hash(user.password, data['password']):
-        return jsonify({'message': 'Invalid email or password'}), 401
+        if not check_password_hash(user.password, data['password']):
+            return jsonify({'message': 'Invalid email or password'}), 401
 
-    access_token = create_access_token(identity=str(user.id))
+        access_token = create_access_token(identity=str(user.id))
 
-    username = User.query.filter_by(id=str(user.id)).first()
+        username = User.query.filter_by(id=str(user.id)).first()
 
-    return jsonify({"name": str(username),"access_token": access_token}), 200
+        return jsonify({"name": str(username),"access_token": access_token}), 200
+
+    except Exception as e:
+        return jsonify({"error": str(e)})
 
 @auth_bp.route('/protected', methods=['GET'])
 @jwt_required()
