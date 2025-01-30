@@ -9,3 +9,6 @@ class Read(db.Model):
     value = db.Column(db.Float, nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.now)
     updated_at = db.Column(db.DateTime, default=datetime.now, onupdate=datetime.now)
+
+    def __init__(self, value):
+        self.value = value

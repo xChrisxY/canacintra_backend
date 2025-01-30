@@ -8,3 +8,8 @@ class SensorReading(db.Model):
 
     sensor = db.relationship('Sensor', backref='readings')
     read = db.relationship('Read', backref='sensors')
+
+    def __init__(self, sensor_id, read_id):
+        self.sensor_id = sensor_id
+        self.read_id = read_id
+        
