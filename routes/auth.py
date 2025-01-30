@@ -52,7 +52,7 @@ def login():
 
         username = User.query.filter_by(id=str(user.id)).first()
 
-        return jsonify({"name": str(username),"access_token": access_token}), 200
+        return jsonify({"id": user.id, "name": user.name, "email": user.email ,"access_token": access_token}), 200
 
     except Exception as e:
         return jsonify({"error": str(e)})
