@@ -8,26 +8,31 @@ auth_bp = Blueprint('auth', __name__, url_prefix='/auth')
 
 @auth_bp.route('/register', methods=['GET', 'POST'])
 def register():
+
+    try:
     
-    data = request.get_json()
+        data = request.get_json()
 
-    if not data.get('name') or not data.get('email') or not data.get('password'):
-        return jsonify({"message": "Missing required fields"}), 400
+        if not data.get('name') or not data.get('email') or not data.get('password'):
+            return jsonify({"message": "Missing required fields"}), 400
 
-    existing_user = User.query.filter_by(email=data['email']).first()
-    if existing_user:
-        return jsonify({"message": "Email is already registered"}), 400
+        existing_user = User.query.filter_by(email=data['email']).first()
+        if existing_user:
+            return jsonify({"message": "Email is already registered"}), 400
 
-    hashed_password = generate_password_hash(data['password'])
+        hashed_password = generate_password_hash(data['password'])
 
-    new_user = User(name=data['name'], email=data['email'], password=hashed_password)
+        new_user = User(name=data['name'], email=data['email'], password=hashed_password)
 
-    db.session.add(new_user)
-    db.session.commit()
+        db.session.add(new_user)
+        db.session.commit()
 
-    access_token = create_access_token(identity=str(new_user.id))
+        access_token = create_access_token(identity=str(new_user.id))
 
-    return jsonify({"message": "User registered succesfully", "access_token":access_token}), 201
+        return jsonify({"message": "User registered succesfully", "access_token":access_token}), 201
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
     
 @auth_bp.route('/login', methods=['POST'])

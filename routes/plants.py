@@ -167,6 +167,7 @@ def get_harvested_plants():
         return jsonify({"error": str(e)}), 500
 
 @plant_bp.route('/growth', methods=['GET'])
+@jwt_required()
 def get_growth_plants():
     
     try:

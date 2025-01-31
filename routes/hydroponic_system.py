@@ -11,24 +11,29 @@ hydroponic_system_bp = Blueprint('hydroponic_system', __name__, url_prefix='/hyd
 @hydroponic_system_bp.route('/user/<string:user_id>', methods=['GET'])
 @jwt_required()
 def hydroponic_system_by_user_id(user_id):
+
+    try:
     
-    user = User.query.get(user_id)
-    if not user:
-        return jsonify({"message": "The user doesn't exist"}), 404
+        user = User.query.get(user_id)
+        if not user:
+            return jsonify({"message": "The user doesn't exist"}), 404
 
-    hydroponic_system_by_user_id = HydroponicSystem.query.filter_by(user_id=user_id)
+        hydroponic_system_by_user_id = HydroponicSystem.query.filter_by(user_id=user_id)
 
-    results = []
-    for hydro in hydroponic_system_by_user_id:
-        results.append({
-            "hydroponicSystemId" : hydro.id,
-            "name": hydro.name,
-            "createdAt" : hydro.created_at,
-            "updatedAt" : hydro.updated_at, 
-            "userId" : hydro.user_id 
-        })
+        results = []
+        for hydro in hydroponic_system_by_user_id:
+            results.append({
+                "hydroponicSystemId" : hydro.id,
+                "name": hydro.name,
+                "createdAt" : hydro.created_at,
+                "updatedAt" : hydro.updated_at, 
+                "userId" : hydro.user_id 
+            })
 
-    return jsonify({"message": "success", "hydroponicSystems": results}), 200
+        return jsonify({"message": "success", "hydroponicSystems": results}), 200
+
+    except Exception as e:
+        return jsonify({"message": str(e)}), 500
 
 
 @hydroponic_system_bp.route('/user/<string:user_id>', methods=['POST'])
